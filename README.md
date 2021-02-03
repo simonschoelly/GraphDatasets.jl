@@ -35,7 +35,7 @@ TUDatasets.SYNTHETICnewDataset
 TUDatasets.SynthieDataset
 TUDatasets.TRIANGLESDataset
 
-# Load the QM9 from TUDatasets. This is a dataset of 129433 molecules represented as graphs.
+# Load QM9 from TUDatasets. This dataset contains 129433 molecules represented as graphs.
 # The resulting ValGraphCollection is an immutable collection of graphs.
 julia> qm9 = loadgraphs(TUDatasets.QM9Dataset())
 129433-element ValGraphCollection of graphs with
@@ -81,6 +81,7 @@ julia> ValGraph(g)
 
 - [GraphMLDatasets.jl](https://github.com/yuehhua/GraphMLDatasets.jl)
 - [SNAPDatasets.jl](https://github.com/JuliaGraphs/SNAPDatasets.jl)
+- [LightGraphsExtras.j](https://github.com/JuliaGraphs/LightGraphsExtras.jl)
 - [MatrixMarket.jl](https://github.com/JuliaSparse/MatrixMarket.jl)
 - [MatrixDepot.jl](https://github.com/JuliaMatrices/MatrixDepot.jl)
 
