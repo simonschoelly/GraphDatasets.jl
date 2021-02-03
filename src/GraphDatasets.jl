@@ -1,5 +1,54 @@
 module GraphDatasets
 
-# Write your package code here.
+import Base: getindex, length, eltype, iterate, show, firstindex, lastindex
+
+import LightGraphs: loadgraphs, SimpleGraph
+
+import SimpleValueGraphs:
+    nv, has_edge, is_directed,
+    get_vertexval, get_edgeval, get_graphval,
+    outedgevals, outneighbors,
+    ValGraph
+
+export
+    list_datasets,
+
+    loadgraphs,
+    loadreadme,
+
+    ValGraphCollection,
+    ValGraphCollectionView,
+    ng,
+
+    TUDatasets,
+
+    # reexport from Base
+    getindex,
+    length,
+    eltype,
+    iterate,
+    show,
+    firstindex,
+    lastindex,
+
+
+    # reexport from LightGraphs & SimpleValueGraphs
+    nv,
+    has_edge,
+
+    get_vertexval,
+    get_edgeval,
+    get_graphval,
+
+    outedgevals,
+    outneighbors,
+
+    SimpleGraph,
+    ValGraph
+
+include("utils.jl")
+include("graphdataset.jl")
+include("valgraphcollection.jl")
+include("TUDatasets.jl")
 
 end
