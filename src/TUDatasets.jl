@@ -235,6 +235,8 @@ function __init__()
         BenzeneDataset(),
         BZRDataset(),
         BZR_MDDataset(),
+        MutagenicityDataset(),
+        MUTAGDataset(),
         DDDataset(),
         ENZYMESDataset(),
         COIL_DELDataset(),
@@ -361,6 +363,51 @@ node_labels_type(::BenzeneDataset) = NamedTuple{(:symbol,), Tuple{String}}
 node_labels_map(::BenzeneDataset, i) = ("C", "O", "H")[i + 1]
 
 graph_attributes_type(::BenzeneDataset) = NamedTuple{(:total_energy,), Tuple{Float64}}
+
+## --------------------------------------
+## Mutagenicity
+## --------------------------------------
+
+struct MutagenicityDataset <: TUDataset end
+
+dataset_name(::MutagenicityDataset) = "Mutagenicity"
+
+dataset_hash(::MutagenicityDataset) = "6230f94ba246b76834fb51ffa138370477b7bf8a784ade92c5e0586780d2ae0e"
+
+dataset_references(::MutagenicityDataset) = [16, 20]
+
+readme_name(::MutagenicityDataset) = "Mutagenicity_label_readme.txt"
+
+node_labels_type(::MutagenicityDataset) = NamedTuple{(:chem,), Tuple{String}}
+node_labels_map(::MutagenicityDataset, i) = ("C", "O", "Cl", "H", "N", "F", "Br", "S", "P", "I", "Na", "K", "Li", "Ca")[i + 1]
+
+edge_labels_type(::MutagenicityDataset) = NamedTuple{(:valence,), Tuple{Int8}}
+edge_labels_map(::MutagenicityDataset, i) = (1, 2, 3)[i + 1]
+
+graph_labels_type(::MutagenicityDataset) = NamedTuple{(:class,), Tuple{String}}
+graph_labels_map(::MutagenicityDataset, i) = ("mutagen", "nonmutagen")[i + 1]
+
+## --------------------------------------
+## MUTAG
+## --------------------------------------
+
+struct MUTAGDataset <: TUDataset end
+
+dataset_name(::MUTAGDataset) = "MUTAG"
+
+dataset_hash(::MUTAGDataset) = "c419bdc853c367d2d83da4973c45100954ae15e10f5ae2cddde6ca431f8207f6"
+
+dataset_references(::MUTAGDataset) = [1, 23]
+
+readme_name(::MUTAGDataset) = "README.txt"
+
+node_labels_type(::MUTAGDataset) = NamedTuple{(:chem,), Tuple{String}}
+node_labels_map(::MUTAGDataset, i) = ("C", "N", "O", "F", "I", "Cl", "Br")[i + 1]
+
+edge_labels_type(::MUTAGDataset) = NamedTuple{(:bond_type,), Tuple{String}}
+edge_labels_map(::MUTAGDataset, i) = ("aromatic", "single", "double", "triple")[i + 1]
+
+graph_labels_type(::MUTAGDataset) = Tuple{Int8}
 
 
 ## --------------------------------------
