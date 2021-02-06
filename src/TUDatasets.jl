@@ -239,6 +239,10 @@ function __init__()
         MUTAGDataset(),
         NCI1Dataset(),
         NCI109Dataset(),
+        PTC_FMDataset(),
+        PTC_FRDataset(),
+        PTC_MMDataset(),
+        PTC_MRDataset(),
         DDDataset(),
         ENZYMESDataset(),
         COIL_DELDataset(),
@@ -446,6 +450,96 @@ readme_name(::NCI109Dataset) = "README.txt"
 node_labels_type(::NCI109Dataset) = Tuple{Int8}
 
 graph_labels_type(::NCI109Dataset) = Tuple{Bool}
+
+## --------------------------------------
+##    PTC_FM
+## --------------------------------------
+
+struct PTC_FMDataset <: TUDataset end
+
+dataset_name(::PTC_FMDataset) = "PTC_FM"
+
+dataset_hash(::PTC_FMDataset) = "a06c80761db8ffd739a171f0d90cfa1f4dc965e1ea716ee5a25cc6cf5f4ae682"
+
+dataset_references(::PTC_FMDataset) = [2, 23]
+
+readme_name(::PTC_FMDataset) = "README.txt"
+
+node_labels_type(::PTC_FMDataset) = Tuple{String}
+# Note that each PTC dataset has slightly different atoms in slightly different order.
+node_labels_map(::PTC_FMDataset, i) = ("In", "P", "C", "O", "N", "Cl", "S", "Br", "Na", "F", "As", "K", "Cu", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
+
+edge_labels_type(::PTC_FMDataset) = Tuple{String}
+# This is weird, as single and double have different order here than for other PTC datasets
+edge_labels_map(::PTC_FMDataset, i) = ("triple", "single", "double", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_FMDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    PTC_FR
+## --------------------------------------
+
+struct PTC_FRDataset <: TUDataset end
+
+dataset_name(::PTC_FRDataset) = "PTC_FR"
+
+dataset_hash(::PTC_FRDataset) = "c4b0083af725aaff27b41228591294922968bd5509179d24c6ea4d3996ed6072"
+
+dataset_references(::PTC_FRDataset) = [2, 23]
+
+readme_name(::PTC_FRDataset) = "README.txt"
+
+node_labels_type(::PTC_FRDataset) = Tuple{String}
+node_labels_map(::PTC_FRDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "As", "K", "Cu", "Zn", "I", "Sn", "Pb", "Te", "Ca")[i + 1]
+
+edge_labels_type(::PTC_FRDataset) = Tuple{String}
+edge_labels_map(::PTC_FRDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_FRDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    PTC_MM
+## --------------------------------------
+
+struct PTC_MMDataset <: TUDataset end
+
+dataset_name(::PTC_MMDataset) = "PTC_MM"
+
+dataset_hash(::PTC_MMDataset) = "3846d6697330a446d46a1274b8708fcc153acdbcf59f649871bc0844bb012e4f"
+
+dataset_references(::PTC_MMDataset) = [2, 23]
+
+readme_name(::PTC_MMDataset) = "README.txt"
+
+node_labels_type(::PTC_MMDataset) = Tuple{String}
+node_labels_map(::PTC_MMDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "As", "K", "B", "Cu", "Zn", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
+
+edge_labels_type(::PTC_MMDataset) = Tuple{String}
+edge_labels_map(::PTC_MMDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_MMDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    PTC_MR
+## --------------------------------------
+
+struct PTC_MRDataset <: TUDataset end
+
+dataset_name(::PTC_MRDataset) = "PTC_MR"
+
+dataset_hash(::PTC_MRDataset) = "5699a6d9f1bc5b3d71495f09ef50de53fa3e6bb24ead1150da678500229f5237"
+
+dataset_references(::PTC_MRDataset) = [2, 23]
+
+readme_name(::PTC_MRDataset) = "README.txt"
+
+node_labels_type(::PTC_MRDataset) = Tuple{String}
+node_labels_map(::PTC_MRDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "K", "Cu", "Zn", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
+
+edge_labels_type(::PTC_MRDataset) = Tuple{String}
+edge_labels_map(::PTC_MRDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_MRDataset) = Tuple{Int8}
 
 
 ## --------------------------------------
