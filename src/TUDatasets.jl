@@ -237,6 +237,8 @@ function __init__()
         BZR_MDDataset(),
         MutagenicityDataset(),
         MUTAGDataset(),
+        NCI1Dataset(),
+        NCI109Dataset(),
         DDDataset(),
         ENZYMESDataset(),
         COIL_DELDataset(),
@@ -408,6 +410,42 @@ edge_labels_type(::MUTAGDataset) = NamedTuple{(:bond_type,), Tuple{String}}
 edge_labels_map(::MUTAGDataset, i) = ("aromatic", "single", "double", "triple")[i + 1]
 
 graph_labels_type(::MUTAGDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    NCI1
+## --------------------------------------
+
+struct NCI1Dataset <: TUDataset end
+
+dataset_name(::NCI1Dataset) = "NCI1"
+
+dataset_hash(::NCI1Dataset) = "10e1458f3bd9224f14e6d7627e74dcfd13e48d376d73935e7bd2900590ef1d82"
+
+dataset_references(::NCI1Dataset) = [8, 9, 22]
+
+readme_name(::NCI1Dataset) = "README.txt"
+
+node_labels_type(::NCI1Dataset) = Tuple{Int8}
+
+graph_labels_type(::NCI1Dataset) = Tuple{Bool}
+
+## --------------------------------------
+##    NCI109
+## --------------------------------------
+
+struct NCI109Dataset <: TUDataset end
+
+dataset_name(::NCI109Dataset) = "NCI109"
+
+dataset_hash(::NCI109Dataset) = "96e521a294e3e9c088540e9e9caccf55e4ca6e97cf468d68445814467956abaf"
+
+dataset_references(::NCI109Dataset) = [8, 9, 22]
+
+readme_name(::NCI109Dataset) = "README.txt"
+
+node_labels_type(::NCI109Dataset) = Tuple{Int8}
+
+graph_labels_type(::NCI109Dataset) = Tuple{Bool}
 
 
 ## --------------------------------------
