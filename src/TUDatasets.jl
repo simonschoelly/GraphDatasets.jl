@@ -249,6 +249,7 @@ function __init__()
         PROTEINS_fullDataset(),
         COIL_DELDataset(),
         COIL_RAGDataset(),
+        FingerprintDataset(),
         COLLABDataset(),
         DBLP_v1Dataset(),
         REDDIT_BINARYDataset(),
@@ -695,6 +696,30 @@ node_attributes_type(::COIL_RAGDataset) = NTuple{64, Float64}
 edge_attributes_type(::COIL_RAGDataset) = NamedTuple{(:boundary,), Tuple{Float32}}
 
 graph_labels_type(::COIL_RAGDataset) = Tuple{Int8} # TODO not sure what the labels mean
+
+## --------------------------------------
+##    Fingerprint
+## --------------------------------------
+
+struct FingerprintDataset <: TUDataset end
+
+dataset_name(::FingerprintDataset) = "Fingerprint"
+
+dataset_hash(::FingerprintDataset) = "6c53fc4e71a26b192681375b7a860afd49a24367cb1a15bda6b57067c467154d"
+
+dataset_references(::FingerprintDataset) = [16, 19]
+
+readme_name(::FingerprintDataset) = "Fingerprint_label_readme.txt"
+
+node_attributes_type(::FingerprintDataset) = @NamedTuple{x::Float64, y::Float64}
+
+edge_attributes_type(::FingerprintDataset) = @NamedTuple{orient::Float64, angle::Float64}
+
+graph_labels_type(::FingerprintDataset) = @NamedTuple{class::String}
+graph_labels_map(::FingerprintDataset, i) =
+    ("L", "TR", "A", "TA", "W", "R", "T", "WR", "TL", "LT", "AT", "RT", "WL", "RW", "AR")[i + 1]
+
+
 
 ## --------------------------------------
 ##    COLLAB
