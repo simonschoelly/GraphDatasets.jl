@@ -245,6 +245,8 @@ function __init__()
         PTC_MRDataset(),
         DDDataset(),
         ENZYMESDataset(),
+        PROTEINSDataset(),
+        PROTEINS_fullDataset(),
         COIL_DELDataset(),
         COIL_RAGDataset(),
         COLLABDataset(),
@@ -607,6 +609,48 @@ graph_labels_type(::ENZYMESDataset) = Tuple{Int8}
 
 node_labels_type(::ENZYMESDataset) = Tuple{Int8}
 node_attributes_type(::ENZYMESDataset) = NTuple{18, Float64}
+
+## --------------------------------------
+##    PROTEINS
+## --------------------------------------
+
+struct PROTEINSDataset <: TUDataset end
+
+dataset_name(::PROTEINSDataset) = "PROTEINS"
+
+dataset_hash(::PROTEINSDataset) = "2da8de15284b88edabca2888ce5444d62f364ed41159260977088c4e53d4d848"
+
+readme_name(::PROTEINSDataset) = "README.txt"
+
+dataset_references(::PROTEINSDataset) = [4, 6]
+
+graph_eltype(::PROTEINSDataset) = Int16
+
+graph_labels_type(::PROTEINSDataset) = Tuple{Int8}
+
+node_labels_type(::PROTEINSDataset) = Tuple{Int8}
+node_attributes_type(::PROTEINSDataset) = Tuple{Float64}
+
+## --------------------------------------
+##    PROTEINS_full
+## --------------------------------------
+
+struct PROTEINS_fullDataset <: TUDataset end
+
+dataset_name(::PROTEINS_fullDataset) = "PROTEINS_full"
+
+dataset_hash(::PROTEINS_fullDataset) = "3b7782403ce98754df3330a67e9b2aff32e69520aa1245bf515c48cc0119c562"
+
+readme_name(::PROTEINS_fullDataset) = "README.txt"
+
+dataset_references(::PROTEINS_fullDataset) = [4, 6]
+
+graph_eltype(::PROTEINS_fullDataset) = Int16
+
+graph_labels_type(::PROTEINS_fullDataset) = Tuple{Int8}
+
+node_labels_type(::PROTEINS_fullDataset) = Tuple{Int8}
+node_attributes_type(::PROTEINS_fullDataset) = NTuple{29, Float64}
 
 ## --------------------------------------
 ##    COIL-DEL
