@@ -42,6 +42,7 @@ jobs:
         with:
           file: lcov.info
   docs:
+    if: ${{ false }} # disable documentation for now
     name: Documentation
     runs-on: ubuntu-latest
     steps:
