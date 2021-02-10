@@ -1,6 +1,11 @@
 using GraphDatasets
 using Test
 
-@testset "GraphDatasets.jl" begin
-    # Write your tests here.
+include("utils.jl")
+
+if parse(Bool, get(ENV, "CI", "false"))
+    @info "CI detected: skipping some test"
+else
+    include("TUDatasets.jl")
 end
+
