@@ -19,21 +19,7 @@ julia> list_datasets()
 TUDatasets.AIDSDataset
 TUDatasets.AspirinDataset
 TUDatasets.BZRDataset
-TUDatasets.BZR_MDDataset
-TUDatasets.BenzeneDataset
-TUDatasets.COIL_DELDataset
-TUDatasets.COIL_RAGDataset
-TUDatasets.COLLABDataset
-TUDatasets.COLORS_3Dataset
-TUDatasets.DBLP_v1Dataset
-TUDatasets.DDDataset
-TUDatasets.ENZYMESDataset
-TUDatasets.QM9Dataset
-TUDatasets.REDDIT_BINARYDataset
-TUDatasets.SYNTHETICDataset
-TUDatasets.SYNTHETICnewDataset
-TUDatasets.SynthieDataset
-TUDatasets.TRIANGLESDataset
+[...]
 
 # Load QM9 from TUDatasets. This dataset contains 129433 molecules represented as graphs.
 # The resulting ValGraphCollection is an immutable collection of graphs.

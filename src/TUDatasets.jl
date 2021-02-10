@@ -235,10 +235,21 @@ function __init__()
         BenzeneDataset(),
         BZRDataset(),
         BZR_MDDataset(),
+        MutagenicityDataset(),
+        MUTAGDataset(),
+        NCI1Dataset(),
+        NCI109Dataset(),
+        PTC_FMDataset(),
+        PTC_FRDataset(),
+        PTC_MMDataset(),
+        PTC_MRDataset(),
         DDDataset(),
         ENZYMESDataset(),
+        PROTEINSDataset(),
+        PROTEINS_fullDataset(),
         COIL_DELDataset(),
         COIL_RAGDataset(),
+        FingerprintDataset(),
         COLLABDataset(),
         DBLP_v1Dataset(),
         REDDIT_BINARYDataset(),
@@ -362,6 +373,177 @@ node_labels_map(::BenzeneDataset, i) = ("C", "O", "H")[i + 1]
 
 graph_attributes_type(::BenzeneDataset) = NamedTuple{(:total_energy,), Tuple{Float64}}
 
+## --------------------------------------
+## Mutagenicity
+## --------------------------------------
+
+struct MutagenicityDataset <: TUDataset end
+
+dataset_name(::MutagenicityDataset) = "Mutagenicity"
+
+dataset_hash(::MutagenicityDataset) = "6230f94ba246b76834fb51ffa138370477b7bf8a784ade92c5e0586780d2ae0e"
+
+dataset_references(::MutagenicityDataset) = [16, 20]
+
+readme_name(::MutagenicityDataset) = "Mutagenicity_label_readme.txt"
+
+node_labels_type(::MutagenicityDataset) = NamedTuple{(:chem,), Tuple{String}}
+node_labels_map(::MutagenicityDataset, i) = ("C", "O", "Cl", "H", "N", "F", "Br", "S", "P", "I", "Na", "K", "Li", "Ca")[i + 1]
+
+edge_labels_type(::MutagenicityDataset) = NamedTuple{(:valence,), Tuple{Int8}}
+edge_labels_map(::MutagenicityDataset, i) = (1, 2, 3)[i + 1]
+
+graph_labels_type(::MutagenicityDataset) = NamedTuple{(:class,), Tuple{String}}
+graph_labels_map(::MutagenicityDataset, i) = ("mutagen", "nonmutagen")[i + 1]
+
+## --------------------------------------
+## MUTAG
+## --------------------------------------
+
+struct MUTAGDataset <: TUDataset end
+
+dataset_name(::MUTAGDataset) = "MUTAG"
+
+dataset_hash(::MUTAGDataset) = "c419bdc853c367d2d83da4973c45100954ae15e10f5ae2cddde6ca431f8207f6"
+
+dataset_references(::MUTAGDataset) = [1, 23]
+
+readme_name(::MUTAGDataset) = "README.txt"
+
+node_labels_type(::MUTAGDataset) = NamedTuple{(:chem,), Tuple{String}}
+node_labels_map(::MUTAGDataset, i) = ("C", "N", "O", "F", "I", "Cl", "Br")[i + 1]
+
+edge_labels_type(::MUTAGDataset) = NamedTuple{(:bond_type,), Tuple{String}}
+edge_labels_map(::MUTAGDataset, i) = ("aromatic", "single", "double", "triple")[i + 1]
+
+graph_labels_type(::MUTAGDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    NCI1
+## --------------------------------------
+
+struct NCI1Dataset <: TUDataset end
+
+dataset_name(::NCI1Dataset) = "NCI1"
+
+dataset_hash(::NCI1Dataset) = "10e1458f3bd9224f14e6d7627e74dcfd13e48d376d73935e7bd2900590ef1d82"
+
+dataset_references(::NCI1Dataset) = [8, 9, 22]
+
+readme_name(::NCI1Dataset) = "README.txt"
+
+node_labels_type(::NCI1Dataset) = Tuple{Int8}
+
+graph_labels_type(::NCI1Dataset) = Tuple{Bool}
+
+## --------------------------------------
+##    NCI109
+## --------------------------------------
+
+struct NCI109Dataset <: TUDataset end
+
+dataset_name(::NCI109Dataset) = "NCI109"
+
+dataset_hash(::NCI109Dataset) = "96e521a294e3e9c088540e9e9caccf55e4ca6e97cf468d68445814467956abaf"
+
+dataset_references(::NCI109Dataset) = [8, 9, 22]
+
+readme_name(::NCI109Dataset) = "README.txt"
+
+node_labels_type(::NCI109Dataset) = Tuple{Int8}
+
+graph_labels_type(::NCI109Dataset) = Tuple{Bool}
+
+## --------------------------------------
+##    PTC_FM
+## --------------------------------------
+
+struct PTC_FMDataset <: TUDataset end
+
+dataset_name(::PTC_FMDataset) = "PTC_FM"
+
+dataset_hash(::PTC_FMDataset) = "a06c80761db8ffd739a171f0d90cfa1f4dc965e1ea716ee5a25cc6cf5f4ae682"
+
+dataset_references(::PTC_FMDataset) = [2, 23]
+
+readme_name(::PTC_FMDataset) = "README.txt"
+
+node_labels_type(::PTC_FMDataset) = Tuple{String}
+# Note that each PTC dataset has slightly different atoms in slightly different order.
+node_labels_map(::PTC_FMDataset, i) = ("In", "P", "C", "O", "N", "Cl", "S", "Br", "Na", "F", "As", "K", "Cu", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
+
+edge_labels_type(::PTC_FMDataset) = Tuple{String}
+# This is weird, as single and double have different order here than for other PTC datasets
+edge_labels_map(::PTC_FMDataset, i) = ("triple", "single", "double", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_FMDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    PTC_FR
+## --------------------------------------
+
+struct PTC_FRDataset <: TUDataset end
+
+dataset_name(::PTC_FRDataset) = "PTC_FR"
+
+dataset_hash(::PTC_FRDataset) = "c4b0083af725aaff27b41228591294922968bd5509179d24c6ea4d3996ed6072"
+
+dataset_references(::PTC_FRDataset) = [2, 23]
+
+readme_name(::PTC_FRDataset) = "README.txt"
+
+node_labels_type(::PTC_FRDataset) = Tuple{String}
+node_labels_map(::PTC_FRDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "As", "K", "Cu", "Zn", "I", "Sn", "Pb", "Te", "Ca")[i + 1]
+
+edge_labels_type(::PTC_FRDataset) = Tuple{String}
+edge_labels_map(::PTC_FRDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_FRDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    PTC_MM
+## --------------------------------------
+
+struct PTC_MMDataset <: TUDataset end
+
+dataset_name(::PTC_MMDataset) = "PTC_MM"
+
+dataset_hash(::PTC_MMDataset) = "3846d6697330a446d46a1274b8708fcc153acdbcf59f649871bc0844bb012e4f"
+
+dataset_references(::PTC_MMDataset) = [2, 23]
+
+readme_name(::PTC_MMDataset) = "README.txt"
+
+node_labels_type(::PTC_MMDataset) = Tuple{String}
+node_labels_map(::PTC_MMDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "As", "K", "B", "Cu", "Zn", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
+
+edge_labels_type(::PTC_MMDataset) = Tuple{String}
+edge_labels_map(::PTC_MMDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_MMDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    PTC_MR
+## --------------------------------------
+
+struct PTC_MRDataset <: TUDataset end
+
+dataset_name(::PTC_MRDataset) = "PTC_MR"
+
+dataset_hash(::PTC_MRDataset) = "5699a6d9f1bc5b3d71495f09ef50de53fa3e6bb24ead1150da678500229f5237"
+
+dataset_references(::PTC_MRDataset) = [2, 23]
+
+readme_name(::PTC_MRDataset) = "README.txt"
+
+node_labels_type(::PTC_MRDataset) = Tuple{String}
+node_labels_map(::PTC_MRDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "K", "Cu", "Zn", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
+
+edge_labels_type(::PTC_MRDataset) = Tuple{String}
+edge_labels_map(::PTC_MRDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
+
+graph_labels_type(::PTC_MRDataset) = Tuple{Int8}
+
 
 ## --------------------------------------
 ##    QM9
@@ -430,6 +612,48 @@ node_labels_type(::ENZYMESDataset) = Tuple{Int8}
 node_attributes_type(::ENZYMESDataset) = NTuple{18, Float64}
 
 ## --------------------------------------
+##    PROTEINS
+## --------------------------------------
+
+struct PROTEINSDataset <: TUDataset end
+
+dataset_name(::PROTEINSDataset) = "PROTEINS"
+
+dataset_hash(::PROTEINSDataset) = "2da8de15284b88edabca2888ce5444d62f364ed41159260977088c4e53d4d848"
+
+readme_name(::PROTEINSDataset) = "README.txt"
+
+dataset_references(::PROTEINSDataset) = [4, 6]
+
+graph_eltype(::PROTEINSDataset) = Int16
+
+graph_labels_type(::PROTEINSDataset) = Tuple{Int8}
+
+node_labels_type(::PROTEINSDataset) = Tuple{Int8}
+node_attributes_type(::PROTEINSDataset) = Tuple{Float64}
+
+## --------------------------------------
+##    PROTEINS_full
+## --------------------------------------
+
+struct PROTEINS_fullDataset <: TUDataset end
+
+dataset_name(::PROTEINS_fullDataset) = "PROTEINS_full"
+
+dataset_hash(::PROTEINS_fullDataset) = "3b7782403ce98754df3330a67e9b2aff32e69520aa1245bf515c48cc0119c562"
+
+readme_name(::PROTEINS_fullDataset) = "README.txt"
+
+dataset_references(::PROTEINS_fullDataset) = [4, 6]
+
+graph_eltype(::PROTEINS_fullDataset) = Int16
+
+graph_labels_type(::PROTEINS_fullDataset) = Tuple{Int8}
+
+node_labels_type(::PROTEINS_fullDataset) = Tuple{Int8}
+node_attributes_type(::PROTEINS_fullDataset) = NTuple{29, Float64}
+
+## --------------------------------------
 ##    COIL-DEL
 ## --------------------------------------
 
@@ -472,6 +696,30 @@ node_attributes_type(::COIL_RAGDataset) = NTuple{64, Float64}
 edge_attributes_type(::COIL_RAGDataset) = NamedTuple{(:boundary,), Tuple{Float32}}
 
 graph_labels_type(::COIL_RAGDataset) = Tuple{Int8} # TODO not sure what the labels mean
+
+## --------------------------------------
+##    Fingerprint
+## --------------------------------------
+
+struct FingerprintDataset <: TUDataset end
+
+dataset_name(::FingerprintDataset) = "Fingerprint"
+
+dataset_hash(::FingerprintDataset) = "6c53fc4e71a26b192681375b7a860afd49a24367cb1a15bda6b57067c467154d"
+
+dataset_references(::FingerprintDataset) = [16, 19]
+
+readme_name(::FingerprintDataset) = "Fingerprint_label_readme.txt"
+
+node_attributes_type(::FingerprintDataset) = @NamedTuple{x::Float64, y::Float64}
+
+edge_attributes_type(::FingerprintDataset) = @NamedTuple{orient::Float64, angle::Float64}
+
+graph_labels_type(::FingerprintDataset) = @NamedTuple{class::String}
+graph_labels_map(::FingerprintDataset, i) =
+    ("L", "TR", "A", "TA", "W", "R", "T", "WR", "TL", "LT", "AT", "RT", "WL", "RW", "AR")[i + 1]
+
+
 
 ## --------------------------------------
 ##    COLLAB
