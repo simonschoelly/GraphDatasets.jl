@@ -34,22 +34,72 @@ struct ValGraphCollection{V <: Integer, V_VALS <: AbstractTuple, E_VALS <: Abstr
 
     function ValGraphCollection(graph_ids, vertex_ids, edge_ids, vertexvals, edgevals, graphvals)
 
-        @assert length(graph_ids) == length(graphvals) + 1
-        @assert length(vertex_ids) == length(vertexvals) + 1
-        @assert length(edge_ids) == length(edgevals)
-
-        # TODO more invariant checks should be done here
-
         V = eltype(edge_ids)
         V_VALS = eltype(vertexvals)
         E_VALS = eltype(edgevals)
         G_VALS = eltype(graphvals)
 
-        return new{V, V_VALS, E_VALS, G_VALS}(graph_ids, vertex_ids, edge_ids, vertexvals, edgevals, graphvals)
+        result = new{V, V_VALS, E_VALS, G_VALS}(graph_ids, vertex_ids, edge_ids, vertexvals, edgevals, graphvals)
+        _verify(result)
+        return result
+    end
+end
+
+function _verify(coll::ValGraphCollection{V, V_VALS, E_VALS, G_VALS}) where {V, V_VALS, E_VALS, G_VALS}
+
+    graph_ids = coll.graph_ids
+    vertex_ids = coll.vertex_ids
+    edge_ids = coll.edge_ids
+    vertexvals = coll.vertexvals
+    edgevals = coll.edgevals
+    graphvals = coll.graphvals
+
+    # when there is no edge
+    if length(coll.graph_ids) <= 1
+        @assert length(vertex_ids) == 0
+        @assert length(edge_ids) == 0
+        @assert length(vertevals) == 0
+        @assert length(edgevals) == 0
+        @assert length(graphvals) == 0
+
+        return nothing
     end
 
+    @assert length(graph_ids) == length(graphvals) + 1
+    @assert length(vertex_ids) == length(vertexvals) + 1
+    @assert length(edge_ids) == length(edgevals)
 
+    @assert length(graph_ids) >= 1
+    @assert graph_ids[begin] >= 1
+    @assert graph_ids[end] == length(vertex_ids)
+    @assert issorted(graph_ids)
+
+    @assert issorted(vertex_ids)
+
+    N = length(graph_ids) - 1
+    for k in 1:N
+        v1 = graph_ids[k]
+        v2 = graph_ids[k + 1]
+
+        nvg = v2 - v1
+
+        edges = Vector{@NamedTuple{src::Int, dst::Int, edge_index::Int}}()
+
+        for v in v1:v2-1
+
+            for e_id in vertex_ids[v]:vertex_ids[v+1]-1
+                @assert edge_ids[e_id] ∈ 1:nvg
+            end
+
+            # TODO we should also verify here that the graph contains reverse edges
+            # and that the weights of the reverse edges are the same
+        end
+
+    end
+
+    return nothing
 end
+
 
 ## ----------------------------------------------
 ##   ng
@@ -197,7 +247,7 @@ function outneighbors(g::ValGraphCollectionView, u::Integer)
     v_id1 = g.collection.vertex_ids[graph_id + (u - 1)]
     v_id2 = g.collection.vertex_ids[graph_id + u]
 
-    # TODO maybe we should return an immutable view
+    # TODO maybe return an immutable view
     return @view g.collection.edge_ids[v_id1:v_id2-1]
 end
 
@@ -208,7 +258,7 @@ function outedgevals(g::ValGraphCollectionView, u::Integer, ::Colon)
     v_id1 = g.collection.vertex_ids[graph_id + (u - 1)]
     v_id2 = g.collection.vertex_ids[graph_id + u]
 
-    # TODO maybe we should return an immutable view
+    # TODO maybe return an immutable view
     return @view g.collection.edgevals[v_id1:v_id2-1]
 end
 
@@ -241,7 +291,7 @@ function SimpleGraph{T}(gv::ValGraphCollectionView) where {T}
 end
 
 ValGraph(gv::ValGraphCollectionView) = ValGraph{eltype(gv)}(gv)
-# TODO this ugly constructor should probably be moved to SimpleValueGraphs.jl
+# TODO this ugly constructor should be moved to SimpleValueGraphs.jl
 function ValGraph{V}(gv::ValGraphCollectionView) where {V}
 
     nvg = Int(nv(gv))
