@@ -733,7 +733,7 @@ dataset_hash(::COLLABDataset) = "cb5b772bc4f3a4690d0601378a3fc993b092aeafd63e2b0
 
 dataset_references(::COLLABDataset) = [14]
 
-graph_eltype(::COLLABDataset) = UInt128
+graph_eltype(::COLLABDataset) = Int16
 
 graph_labels_type(::COLLABDataset) = Tuple{Int8} # TODO not sure what the labels mean
 
@@ -788,7 +788,7 @@ dataset_hash(::COLORS_3Dataset) = "380d8f9e03c73455a2b280f859b136c53c80544eabd83
 
 dataset_references(::COLORS_3Dataset) = [27]
 
-graph_eltype(::COLORS_3Dataset) = UInt128
+graph_eltype(::COLORS_3Dataset) = Int16
 
 graph_attributes_type(::COLORS_3Dataset) = Tuple{Int8} # TODO not sure what the labels mean
 
