@@ -16,7 +16,7 @@ An immutable collection of multiple undirected value graphs.
 ### See also
 [`ng`](@ref), [`ValGraphCollectionView`](@ref)
 """
-struct ValGraphCollection{V <: Integer, V_VALS <: AbstractTuple, E_VALS <: AbstractTuple, G_VALS <: AbstractTuple}
+struct ValGraphCollection{V <: Integer, V_VALS <: AbstractTuple, E_VALS <: AbstractTuple, G_VALS <: AbstractTuple} <: AbstractVector{AbstractValGraph{V, V_VALS, E_VALS, G_VALS}}
 
     # This data structure is very similar to a sparse matrix in CSR or CSC format,
     # with an additional index array that denotes where a graph starts and ends.
@@ -117,28 +117,18 @@ ng(coll::ValGraphCollection) = max(0, length(coll.graph_ids) - 1)
 
 
 ## ----------------------------------------------
-##   iterable & indexable
+##   AbstractVector interface
 ## ----------------------------------------------
 
-length(coll::ValGraphCollection) = ng(coll)
+Base.size(coll::ValGraphCollection) = (ng(coll),)
 
-function getindex(coll::ValGraphCollection, i)
+Base.getindex(coll::ValGraphCollection, i::Int) = ValGraphCollectionView(coll, i)
 
-        return ValGraphCollectionView(coll, i)
-end
+Base.IndexStyle(::Type{<:ValGraphCollection}) = IndexLinear()
 
-firstindex(coll::ValGraphCollection) = 1
-lastindex(coll::ValGraphCollection) = length(coll)
-
-
-eltype(::Type{<:ValGraphCollection{V, V_VALS, E_VALS, G_VALS}}) where {V, V_VALS, E_VALS, G_VALS} =
+Base.eltype(::Type{<:ValGraphCollection{V, V_VALS, E_VALS, G_VALS}}) where {V, V_VALS, E_VALS, G_VALS} =
     ValGraphCollectionView{V, V_VALS, E_VALS, G_VALS}
 
-function iterate(coll::ValGraphCollection, state = 1)
-
-    state > ng(coll) && return nothing
-    return coll[state], (state + 1)
-end
 
 ## ----------------------------------------------
 ##   show
