@@ -36,16 +36,21 @@ function dataset_message(ds::GraphDataset)
 end
 
 """
-    loadgraphs(ds::GraphDataset)
+    loadgraphs(ds::GraphDataset; resolve_categories::Bool=false)
 
 Loads multiple graphs from a dataset `ds`.
 
 Either this method or `loadgraph` must be implement for new subytpes of `GraphDataset`.
 
+# Keywords
+- `resolve_categories`: Some graph metadata might be of categorical form (i.e strings).
+    If this argument is true, try to resolve that category instead of keeping a numerical
+    value.
+
 ### See also
 [`loadgraph`](@Ref), `GraphDataset`](@Ref)
 """
-loadgraphs(ds::GraphDataset)
+loadgraphs(ds::GraphDataset; resolve_categories::Bool)
 
 ## ----------------------------------------
 ##    optional methods to implement

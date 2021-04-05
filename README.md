@@ -23,7 +23,7 @@ TUDatasets.BZRDataset
 
 # Load QM9 from TUDatasets. This dataset contains 129433 molecules represented as graphs.
 # The resulting ValGraphCollection is an immutable collection of graphs.
-julia> qm9 = loadgraphs(TUDatasets.QM9Dataset())
+julia> qm9 = loadgraphs(TUDatasets.QM9Dataset(); resolve_categories=true)
 129433-element ValGraphCollection of graphs with
               eltype: Int8
   vertex value types: (Bool, Bool, Bool, Bool, Bool, Int8, Bool, Bool, Bool, Bool, Bool, Bool, Int64, Float64, Float64, Float64)
