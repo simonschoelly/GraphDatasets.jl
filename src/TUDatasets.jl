@@ -100,9 +100,53 @@ function loadreadme(ds::TUDataset)
     return Text(read(path, String))
 end
 
-full_vertexval_types(ds::TUDataset) = cat_tuple_types(node_labels_type(ds), node_attributes_type(ds))
-full_edgeval_types(ds::TUDataset) = cat_tuple_types(edge_labels_type(ds), edge_attributes_type(ds))
-full_graphval_types(ds::TUDataset) = cat_tuple_types(graph_labels_type(ds), graph_attributes_type(ds))
+function full_vertexval_types(ds::TUDataset; resolve_categories::Bool)
+
+    if resolve_categories
+        return cat_tuple_types(node_labels_type(ds), node_attributes_type(ds))
+    end
+
+    NLT = node_labels_type(ds)
+    RNLT =  if NLT <: NamedTuple
+                NamedTuple{fieldnames(NLT), NTuple{length(fieldnames(NLT)), Int8}}
+            else
+                NTuple{length(fieldnames(NLT)), Int8}
+            end
+
+    return cat_tuple_types(RNLT, node_attributes_type(ds))
+end
+
+function full_edgeval_types(ds::TUDataset; resolve_categories::Bool)
+
+    if resolve_categories
+        return cat_tuple_types(edge_labels_type(ds), edge_attributes_type(ds))
+    end
+
+    ELT = edge_labels_type(ds)
+    RELT =  if ELT <: NamedTuple
+                NamedTuple{fieldnames(ELT), NTuple{length(fieldnames(ELT)), Int8}}
+            else
+                NTuple{length(fieldnames(ELT)), Int8}
+            end
+
+    return cat_tuple_types(RELT, edge_attributes_type(ds))
+end
+
+function full_graphval_types(ds::TUDataset; resolve_categories::Bool)
+
+    if resolve_categories
+        return cat_tuple_types(graph_labels_type(ds), graph_attributes_type(ds))
+    end
+
+    GLT = graph_labels_type(ds)
+    RGLT =  if GLT <: NamedTuple
+                NamedTuple{fieldnames(GLT), NTuple{length(fieldnames(GLT)), Int8}}
+            else
+                NTuple{length(fieldnames(GLT)), Int8}
+            end
+
+    return cat_tuple_types(RGLT, graph_attributes_type(ds))
+end
 
 prefix(ds::TUDataset) = dataset_name(ds) * '_'
 
@@ -133,17 +177,23 @@ function load_node_attributes(ds::TUDataset)
     return CSV.File(node_attributes_path, header=false, strict=true, types=[node_attributes_type(ds).types...])
 end
 
-function load_full_vertexvals(ds::TUDataset, n)
+function load_full_vertexvals(ds::TUDataset, n; resolve_categories::Bool)
 
     node_labels = load_node_labels(ds::TUDataset)
     node_attributes = load_node_attributes(ds::TUDataset)
 
-    V_VALS = full_vertexval_types(ds)
+    V_VALS = full_vertexval_types(ds; resolve_categories=resolve_categories)
 
     vertexvals = Vector{V_VALS}(undef, n)
 
     for i ∈ 1:n
-        label_i = node_labels == nothing ? () : tuple(node_labels_map(ds, node_labels[i][1]))
+        label_i =   if node_labels == nothing
+                        ()
+                    elseif resolve_categories
+                        tuple(node_labels_map(ds, node_labels[i][1]))
+                    else
+                        tuple(node_labels[i][1])
+                    end
         attr_i = node_attributes == nothing ? () : (node_attributes[i]...,)
         vertexvals[i] = V_VALS((label_i..., attr_i...))
     end
@@ -165,17 +215,23 @@ function load_edge_attributes(ds::TUDataset)
     return CSV.File(path, header=false, strict=true, types=[edge_attributes_type(ds).types...])
 end
 
-function load_full_edgevals(ds::TUDataset, m)
+function load_full_edgevals(ds::TUDataset, m; resolve_categories::Bool)
 
     edge_labels = load_edge_labels(ds::TUDataset)
     edge_attributes = load_edge_attributes(ds::TUDataset)
 
-    E_VALS = full_edgeval_types(ds)
+    E_VALS = full_edgeval_types(ds; resolve_categories=resolve_categories)
 
     edgevals = Vector{E_VALS}(undef, m)
 
     for i ∈ 1:m
-        label_i = edge_labels == nothing ? () : tuple(edge_labels_map(ds, edge_labels[i][1]))
+        label_i =   if edge_labels == nothing
+                        ()
+                    elseif resolve_categories
+                        tuple(edge_labels_map(ds, edge_labels[i][1]))
+                    else
+                        tuple(edge_labels[i][1])
+                    end
         attr_i = edge_attributes == nothing ? () : (edge_attributes[i]...,)
         edgevals[i] = E_VALS((label_i..., attr_i...))
     end
@@ -204,17 +260,23 @@ function load_graph_attributes(ds::TUDataset)
     return CSV.File(path, header=false, strict=true, delim=',', types=[graph_attributes_type(ds).types...])
 end
 
-function load_full_graphvals(ds::TUDataset, N)
+function load_full_graphvals(ds::TUDataset, N; resolve_categories::Bool)
 
     graph_labels = load_graph_labels(ds::TUDataset)
     graph_attributes = load_graph_attributes(ds::TUDataset)
 
-    G_VALS = full_graphval_types(ds)
+    G_VALS = full_graphval_types(ds; resolve_categories=resolve_categories)
 
     graphvals = Vector{G_VALS}(undef, N)
 
     for i ∈ 1:N
-        label_i = graph_labels == nothing ? () : tuple(graph_labels_map(ds, graph_labels[i][1]))
+        label_i = if graph_labels == nothing
+            ()
+        elseif resolve_categories
+            tuple(graph_labels_map(ds, graph_labels[i][1]))
+        else
+            tuple(graph_labels[i][1])
+        end
         attr_i = graph_attributes == nothing ? () : (graph_attributes[i]...,)
         graphvals[i] = G_VALS((label_i..., attr_i...))
     end
@@ -882,7 +944,7 @@ node_attributes_type(::TRIANGLESDataset) = Tuple{Int8}
 # TODO this is quite ugly
 # TODO fix type instabilities
 # TODO check data for inconsistencies
-function loadgraphs(ds::TUDataset)
+function loadgraphs(ds::TUDataset; resolve_categories::Bool=false)
 
     edgelist        = load_edgelist(ds)
     graph_indicator = load_graphindicator(ds)
@@ -891,17 +953,26 @@ function loadgraphs(ds::TUDataset)
     m = length(edgelist) # number of edges
     N = maximum(row -> row[1], graph_indicator) # number of graphs
 
-    vertex_ids = zeros(Int, n + 1)
-    edge_ids = zeros(graph_eltype(ds), m)
-    graph_ids = zeros(Int, N + 1)
-
-    vertexvals = load_full_vertexvals(ds, n)
-    edgevals = load_full_edgevals(ds, m)
-    graphvals = load_full_graphvals(ds, N)
+    vertexvals = load_full_vertexvals(ds, n; resolve_categories=resolve_categories)
+    edgevals = load_full_edgevals(ds, m; resolve_categories=resolve_categories)
+    graphvals = load_full_graphvals(ds, N; resolve_categories=resolve_categories)
 
     @assert length(vertexvals) == n
     @assert length(edgevals) == m
     @assert length(graphvals) == N
+
+    return _to_ValGraphCollection(graph_eltype(ds), edgelist, graph_indicator, vertexvals, edgevals, graphvals)
+end
+
+function _to_ValGraphCollection(V, edgelist, graph_indicator, vertexvals, edgevals, graphvals)
+
+    n = length(graph_indicator) # number of vertices
+    m = length(edgelist) # number of edges
+    N = maximum(row -> row[1], graph_indicator) # number of graphs
+
+    vertex_ids = zeros(Int, n + 1)
+    edge_ids = zeros(V, m)
+    graph_ids = zeros(Int, N + 1)
 
     k = 0
     for (v_id, row) in enumerate(graph_indicator)
