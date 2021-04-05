@@ -993,10 +993,10 @@ function loadgraphs(ds::TUDataset; resolve_categories::Bool=false)
     @assert length(edgevals) == m
     @assert length(graphvals) == N
 
-    return _to_ValGraphCollection(graph_eltype(ds), edgelist, graph_indicator, vertexvals, edgevals, graphvals)
+    return _to_ValGraphCollection(ds, graph_eltype(ds), edgelist, graph_indicator, vertexvals, edgevals, graphvals)
 end
 
-function _to_ValGraphCollection(V, edgelist, graph_indicator, vertexvals, edgevals, graphvals)
+function _to_ValGraphCollection(ds::TUDataset, V, edgelist, graph_indicator, vertexvals, edgevals, graphvals)
 
     n = length(graph_indicator) # number of vertices
     m = length(edgelist) # number of edges
