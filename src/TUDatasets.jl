@@ -317,6 +317,8 @@ function __init__()
         IMDB_BINARYDataset(),
         IMDB_MULTIDataset(),
         REDDIT_BINARYDataset(),
+        REDDIT_MULTI_5KDataset(),
+        REDDIT_MULTI_12KDataset(),
         COLORS_3Dataset(),
         QM9Dataset(),
         SYNTHETICDataset(),
@@ -869,6 +871,38 @@ dataset_references(::REDDIT_BINARYDataset) = [14]
 graph_eltype(::REDDIT_BINARYDataset) = Int16
 
 graph_labels_type(::REDDIT_BINARYDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    REDDIT-MULTI-5K
+## --------------------------------------
+
+struct REDDIT_MULTI_5KDataset <: TUDataset end
+
+dataset_name(::REDDIT_MULTI_5KDataset) = "REDDIT-MULTI-5K"
+
+dataset_hash(::REDDIT_MULTI_5KDataset) = "68587783c33d54dd6107a1fc101594fd2b9d1af4e99cafe733636f383ae0c8ee"
+
+dataset_references(::REDDIT_MULTI_5KDataset) = [14]
+
+graph_eltype(::REDDIT_MULTI_5KDataset) = Int16
+
+graph_labels_type(::REDDIT_MULTI_5KDataset) = Tuple{Int8}
+
+## --------------------------------------
+##    REDDIT-MULTI-12K
+## --------------------------------------
+
+struct REDDIT_MULTI_12KDataset <: TUDataset end
+
+dataset_name(::REDDIT_MULTI_12KDataset) = "REDDIT-MULTI-12K"
+
+dataset_hash(::REDDIT_MULTI_12KDataset) = "dc133043edae3df088a4bfbd09595f105c0a6e2df533662b6ddc7d3268b5b49b"
+
+dataset_references(::REDDIT_MULTI_12KDataset) = [14]
+
+graph_eltype(::REDDIT_MULTI_12KDataset) = Int16
+
+graph_labels_type(::REDDIT_MULTI_12KDataset) = Tuple{Int8}
 
 ## --------------------------------------
 ##    COLORS-3
