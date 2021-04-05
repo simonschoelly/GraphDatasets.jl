@@ -314,6 +314,8 @@ function __init__()
         FingerprintDataset(),
         COLLABDataset(),
         DBLP_v1Dataset(),
+        IMDB_BINARYDataset(),
+        IMDB_MULTIDataset(),
         REDDIT_BINARYDataset(),
         COLORS_3Dataset(),
         QM9Dataset(),
@@ -823,6 +825,36 @@ edge_labels_map(::DBLP_v1Dataset, i) = ("P2P", "P2W", "W2W")[i + 1]
 node_labels_type(::DBLP_v1Dataset) = Tuple{UInt16}
 
 ## --------------------------------------
+##    IMDB-BINARY
+## --------------------------------------
+
+struct IMDB_BINARYDataset <: TUDataset end
+
+dataset_name(::IMDB_BINARYDataset) = "IMDB-BINARY"
+
+dataset_hash(::IMDB_BINARYDataset) = "b291ec8b26d85c70faa2ba0a2433e1f407ed2ef5d0fc072d36b9a95e49a1bb27"
+
+dataset_references(::IMDB_BINARYDataset) = [14]
+
+graph_eltype(::IMDB_BINARYDataset) = Int16
+
+graph_labels_type(::IMDB_BINARYDataset) = @NamedTuple{class::Int8}
+
+## --------------------------------------
+##    IMDB-MULTI
+## --------------------------------------
+
+struct IMDB_MULTIDataset <: TUDataset end
+
+dataset_name(::IMDB_MULTIDataset) = "IMDB-MULTI"
+
+dataset_hash(::IMDB_MULTIDataset) = "a4a302149ebf4c76fa1f0fb108baff89fcbf9d35de306b18f27a8419b9a1a690"
+
+dataset_references(::IMDB_MULTIDataset) = [14]
+
+graph_labels_type(::IMDB_MULTIDataset) = @NamedTuple{class::Int8}
+
+## --------------------------------------
 ##    REDDIT-BINARY
 ## --------------------------------------
 
@@ -961,10 +993,10 @@ function loadgraphs(ds::TUDataset; resolve_categories::Bool=false)
     @assert length(edgevals) == m
     @assert length(graphvals) == N
 
-    return _to_ValGraphCollection(graph_eltype(ds), edgelist, graph_indicator, vertexvals, edgevals, graphvals)
+    return _to_ValGraphCollection(ds, graph_eltype(ds), edgelist, graph_indicator, vertexvals, edgevals, graphvals)
 end
 
-function _to_ValGraphCollection(V, edgelist, graph_indicator, vertexvals, edgevals, graphvals)
+function _to_ValGraphCollection(ds::TUDataset, V, edgelist, graph_indicator, vertexvals, edgevals, graphvals)
 
     n = length(graph_indicator) # number of vertices
     m = length(edgelist) # number of edges
