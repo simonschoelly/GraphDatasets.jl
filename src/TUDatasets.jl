@@ -305,6 +305,11 @@ function __init__()
         PTC_FRDataset(),
         PTC_MMDataset(),
         PTC_MRDataset(),
+        QM9Dataset(),
+        ZINC_fullDataset(),
+        ZINC_testDataset(),
+        ZINC_trainDataset(),
+        ZINC_valDataset(),
         DDDataset(),
         ENZYMESDataset(),
         PROTEINSDataset(),
@@ -320,7 +325,6 @@ function __init__()
         REDDIT_MULTI_5KDataset(),
         REDDIT_MULTI_12KDataset(),
         COLORS_3Dataset(),
-        QM9Dataset(),
         SYNTHETICDataset(),
         SYNTHETICnewDataset(),
         SynthieDataset(),
@@ -638,6 +642,112 @@ edge_attributes_type(::QM9Dataset) = NTuple{4, Bool}
 
 graph_attributes_type(::QM9Dataset) = NamedTuple{(:μ, :α, :ϵ_HOMO, :ϵ_LUMO, :Δϵ, :electronic_spatial_energy,
         :ZPVE, :U_0, :U, :H, :G, :c_v, :UATOM_0, :UTAM, :HATOM, :GATOM, :A, :B, :C), NTuple{19, Float64}}
+
+
+## --------------------------------------
+##    ZINC_full
+## --------------------------------------
+
+struct ZINC_fullDataset <: TUDataset end
+
+dataset_name(::ZINC_fullDataset) = "ZINC_full"
+
+dataset_hash(::ZINC_fullDataset) = "b491cce62afbf5e0febab9ca0bacd0a2458910cefadfd3d93bb6c49b90d62b3c"
+
+readme_name(::ZINC_fullDataset) = "README.txt"
+
+dataset_references(::ZINC_fullDataset) = [31]
+
+edge_labels_type(::ZINC_fullDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_fullDataset, i) = ("single", "double", "triple")[i]
+
+node_labels_type(::ZINC_fullDataset) = @NamedTuple{atom_type::String}
+node_labels_map(::ZINC_fullDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
+                                          "O -", "N H1 +", "Br", "N H3 +", "N H2 +",
+                                          "N +", "N -", "S -", "I", "P", "O H1 +",
+                                          "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
+                                          "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+graph_attributes_type(::ZINC_fullDataset) = Tuple{Float64}
+
+## --------------------------------------
+##    ZINC_test
+## --------------------------------------
+
+struct ZINC_testDataset <: TUDataset end
+
+dataset_name(::ZINC_testDataset) = "ZINC_test"
+
+dataset_hash(::ZINC_testDataset) = "1fe8516fef763cf71238d19a12680ce5cb6a620bbf36134eca8045d6f3e0ed4d"
+
+readme_name(::ZINC_testDataset) = "README.txt"
+
+dataset_references(::ZINC_testDataset) = [31]
+
+edge_labels_type(::ZINC_testDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_testDataset, i) = ("single", "double", "triple")[i]
+
+node_labels_type(::ZINC_testDataset) = @NamedTuple{atom_type::String}
+node_labels_map(::ZINC_testDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
+                                          "O -", "N H1 +", "Br", "N H3 +", "N H2 +",
+                                          "N +", "N -", "S -", "I", "P", "O H1 +",
+                                          "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
+                                          "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+graph_attributes_type(::ZINC_testDataset) = Tuple{Float64}
+
+## --------------------------------------
+##    ZINC_train
+## --------------------------------------
+
+struct ZINC_trainDataset <: TUDataset end
+
+dataset_name(::ZINC_trainDataset) = "ZINC_train"
+
+dataset_hash(::ZINC_testDataset) = "37aa44df9dd9417600c240226d1d847a7b9098c3036c9bf7e2000196cec92bef"
+
+readme_name(::ZINC_trainDataset) = "README.txt"
+
+dataset_references(::ZINC_trainDataset) = [31]
+
+edge_labels_type(::ZINC_trainDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_trainDataset, i) = ("single", "double", "triple")[i]
+
+node_labels_type(::ZINC_trainDataset) = @NamedTuple{atom_type::String}
+node_labels_map(::ZINC_trainDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
+                                          "O -", "N H1 +", "Br", "N H3 +", "N H2 +",
+                                          "N +", "N -", "S -", "I", "P", "O H1 +",
+                                          "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
+                                          "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+graph_attributes_type(::ZINC_trainDataset) = Tuple{Float64}
+
+## --------------------------------------
+##    ZINC_val
+## --------------------------------------
+
+struct ZINC_valDataset <: TUDataset end
+
+dataset_name(::ZINC_valDataset) = "ZINC_val"
+
+dataset_hash(::ZINC_valDataset) = "17b20a99822f17eca9cd6c3e5ac33f41fd42c0ee4dedfd051dac0b0a58f8fa88"
+
+readme_name(::ZINC_valDataset) = "README.txt"
+
+dataset_references(::ZINC_valDataset) = [31]
+
+edge_labels_type(::ZINC_valDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_valDataset, i) = ("single", "double", "triple")[i]
+
+node_labels_type(::ZINC_valDataset) = @NamedTuple{atom_type::String}
+node_labels_map(::ZINC_valDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
+                                          "O -", "N H1 +", "Br", "N H3 +", "N H2 +",
+                                          "N +", "N -", "S -", "I", "P", "O H1 +",
+                                          "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
+                                          "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+graph_attributes_type(::ZINC_valDataset) = Tuple{Float64}
+
 
 ## --------------------------------------
 ##    DD
