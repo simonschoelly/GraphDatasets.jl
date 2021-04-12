@@ -242,13 +242,8 @@ end
 function load_graph_labels(ds::TUDataset)
 
     T = graph_labels_type(ds)
+    T == Tuple{} && return nothing
     path = joinpath(dataset_path(ds), prefix(ds) * "graph_labels.txt")
-    if T == Tuple{}
-        if isfile(path)
-            @warn "TODO warn message"
-        end
-        return nothing
-    end
     # TODO throw exception if there is no file but labels type defined
     return CSV.File(path, header=false, strict=true, type=Int8)
 end
@@ -346,17 +341,17 @@ dataset_hash(::AIDSDataset) = "ef65a8095846588ffd6e17f95c1968a247d8ada7295a61209
 
 dataset_references(::AIDSDataset) = [16, 17]
 
-node_labels_type(::AIDSDataset) = NamedTuple{(:symbol,), Tuple{String}}
+node_labels_type(::AIDSDataset) = @NamedTuple{symbol::String}
 node_labels_map(::AIDSDataset, i) = (
                "C",  "O",  "N",  "Cl", "F",  "S",  "Se", "P", "Na", "I",  "Co", "Br", "Li",
                 "Si", "Mg", "Cu", "As", "B",  "Pt", "Ru", "K",  "Pd", "Au", "Te", "W",  "Rh",
                 "Zn", "Bi", "Pb", "Ge", "Sb", "Sn", "Ga", "Hg", "Ho", "Tl", "Ni", "Tb")[i + 1]
-node_attributes_type(::AIDSDataset) = NamedTuple{(:chem, :charge, :x, :y), NTuple{4, Float64}}
+node_attributes_type(::AIDSDataset) = @NamedTuple{chem::Float64, charge::Float64, x::Float64, y::Float64}
 
-edge_labels_type(::AIDSDataset) = NamedTuple{tuple(:valence), Tuple{Int8}}
+edge_labels_type(::AIDSDataset) = @NamedTuple{valence::Int8}
 edge_labels_map(::AIDSDataset, i) = (1, 2, 3)[i + 1]
 
-graph_labels_type(::AIDSDataset) = NamedTuple{(:class,), Tuple{String}}
+graph_labels_type(::AIDSDataset) = @NamedTuple{class::String}
 graph_labels_map(::AIDSDataset, i) = ("active", "inactive")[i + 1]
 
 ## --------------------------------------
@@ -373,10 +368,10 @@ readme_name(::BZRDataset) = "README.txt"
 
 dataset_references(::BZRDataset) = [7]
 
-graph_labels_type(::BZRDataset) = Tuple{Int8}
-
 node_labels_type(::BZRDataset) = Tuple{Int8}
 node_attributes_type(::BZRDataset) = NTuple{3, Float64}
+
+graph_labels_type(::BZRDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    BZR_MD
@@ -392,14 +387,14 @@ readme_name(::BZR_MDDataset) = "README.txt"
 
 dataset_references(::BZR_MDDataset) = [7, 23]
 
-graph_labels_type(::BZR_MDDataset) = Tuple{Int8}
-
-edge_labels_type(::BZR_MDDataset) = NamedTuple{(:bond_type, ), Tuple{String}}
-edge_labels_map(::BZR_MDDataset, i) = ("aromatic", "no chemical bound", "single", "double", "triple")[i + 1]
-edge_attributes_type(::BZR_MDDataset) = NamedTuple{(:distance,), Tuple{Float64}}
-
-node_labels_type(::BZR_MDDataset) = NamedTuple{(:atom_type,), Tuple{String}}
+node_labels_type(::BZR_MDDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::BZR_MDDataset, i) = ("C", "N", "O", "F", "Cl", "S", "P", "BR")[i + 1]
+
+edge_labels_type(::BZR_MDDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::BZR_MDDataset, i) = ("aromatic", "no chemical bound", "single", "double", "triple")[i + 1]
+edge_attributes_type(::BZR_MDDataset) = @NamedTuple{distance::Float64}
+
+graph_labels_type(::BZR_MDDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    aspirin
@@ -413,12 +408,11 @@ dataset_hash(::AspirinDataset) = "b01b6b73841768670a3a79d04e04a79bb6027ee87a335b
 
 dataset_references(::AspirinDataset) = [36]
 
-node_labels_type(::AspirinDataset) = NamedTuple{(:symbol,), Tuple{String}}
+node_labels_type(::AspirinDataset) = @NamedTuple{symbol::String}
 node_labels_map(::AspirinDataset, i) = ("C", "O", "H")[i + 1]
-
 node_attributes_type(::AspirinDataset) = NamedTuple{(:x_coordinate, :y_coordinate, :z_coordinate, :atom_force_x, :atom_force_y, :atom_force_z), NTuple{6, Float64}}
 
-graph_attributes_type(::AspirinDataset) = NamedTuple{(:total_energy,), Tuple{Float64}}
+graph_attributes_type(::AspirinDataset) = @NamedTuple{total_energy::Float64}
 
 readme_name(::AspirinDataset) = "readme.txt"
 
@@ -436,12 +430,11 @@ dataset_references(::BenzeneDataset) = [36]
 
 readme_name(::BenzeneDataset) = "readme.txt"
 
+node_labels_type(::BenzeneDataset) = @NamedTuple{symbol::String}
+node_labels_map(::BenzeneDataset, i) = ("C", "O", "H")[i + 1]
 node_attributes_type(::BenzeneDataset) = NamedTuple{(:x_coordinate, :y_coordinate, :z_coordinate, :atom_force_x, :atom_force_y, :atom_force_z), NTuple{6, Float64}}
 
-node_labels_type(::BenzeneDataset) = NamedTuple{(:symbol,), Tuple{String}}
-node_labels_map(::BenzeneDataset, i) = ("C", "O", "H")[i + 1]
-
-graph_attributes_type(::BenzeneDataset) = NamedTuple{(:total_energy,), Tuple{Float64}}
+graph_attributes_type(::BenzeneDataset) = @NamedTuple{total_energy::Float64}
 
 ## --------------------------------------
 ## Mutagenicity
@@ -457,13 +450,13 @@ dataset_references(::MutagenicityDataset) = [16, 20]
 
 readme_name(::MutagenicityDataset) = "Mutagenicity_label_readme.txt"
 
-node_labels_type(::MutagenicityDataset) = NamedTuple{(:chem,), Tuple{String}}
+node_labels_type(::MutagenicityDataset) = @NamedTuple{chem::String}
 node_labels_map(::MutagenicityDataset, i) = ("C", "O", "Cl", "H", "N", "F", "Br", "S", "P", "I", "Na", "K", "Li", "Ca")[i + 1]
 
-edge_labels_type(::MutagenicityDataset) = NamedTuple{(:valence,), Tuple{Int8}}
+edge_labels_type(::MutagenicityDataset) = @NamedTuple{valence::Int8}
 edge_labels_map(::MutagenicityDataset, i) = (1, 2, 3)[i + 1]
 
-graph_labels_type(::MutagenicityDataset) = NamedTuple{(:class,), Tuple{String}}
+graph_labels_type(::MutagenicityDataset) = @NamedTuple{class::String}
 graph_labels_map(::MutagenicityDataset, i) = ("mutagen", "nonmutagen")[i + 1]
 
 ## --------------------------------------
@@ -480,13 +473,13 @@ dataset_references(::MUTAGDataset) = [1, 23]
 
 readme_name(::MUTAGDataset) = "README.txt"
 
-node_labels_type(::MUTAGDataset) = NamedTuple{(:chem,), Tuple{String}}
+node_labels_type(::MUTAGDataset) = @NamedTuple{chem::String}
 node_labels_map(::MUTAGDataset, i) = ("C", "N", "O", "F", "I", "Cl", "Br")[i + 1]
 
-edge_labels_type(::MUTAGDataset) = NamedTuple{(:bond_type,), Tuple{String}}
+edge_labels_type(::MUTAGDataset) = @NamedTuple{bond_type::String}
 edge_labels_map(::MUTAGDataset, i) = ("aromatic", "single", "double", "triple")[i + 1]
 
-graph_labels_type(::MUTAGDataset) = Tuple{Int8}
+graph_labels_type(::MUTAGDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    NCI1
@@ -504,7 +497,7 @@ readme_name(::NCI1Dataset) = "README.txt"
 
 node_labels_type(::NCI1Dataset) = Tuple{Int8}
 
-graph_labels_type(::NCI1Dataset) = Tuple{Bool}
+graph_labels_type(::NCI1Dataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    NCI109
@@ -522,7 +515,7 @@ readme_name(::NCI109Dataset) = "README.txt"
 
 node_labels_type(::NCI109Dataset) = Tuple{Int8}
 
-graph_labels_type(::NCI109Dataset) = Tuple{Bool}
+graph_labels_type(::NCI109Dataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    PTC_FM
@@ -538,15 +531,15 @@ dataset_references(::PTC_FMDataset) = [2, 23]
 
 readme_name(::PTC_FMDataset) = "README.txt"
 
-node_labels_type(::PTC_FMDataset) = Tuple{String}
+node_labels_type(::PTC_FMDataset) = @NamedTuple{atom_type::String}
 # Note that each PTC dataset has slightly different atoms in slightly different order.
 node_labels_map(::PTC_FMDataset, i) = ("In", "P", "C", "O", "N", "Cl", "S", "Br", "Na", "F", "As", "K", "Cu", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
 
-edge_labels_type(::PTC_FMDataset) = Tuple{String}
+edge_labels_type(::PTC_FMDataset) = @NamedTuple{bond_type::String}
 # This is weird, as single and double have different order here than for other PTC datasets
 edge_labels_map(::PTC_FMDataset, i) = ("triple", "single", "double", "aromatic")[i + 1]
 
-graph_labels_type(::PTC_FMDataset) = Tuple{Int8}
+graph_labels_type(::PTC_FMDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    PTC_FR
@@ -562,13 +555,13 @@ dataset_references(::PTC_FRDataset) = [2, 23]
 
 readme_name(::PTC_FRDataset) = "README.txt"
 
-node_labels_type(::PTC_FRDataset) = Tuple{String}
+node_labels_type(::PTC_FRDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::PTC_FRDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "As", "K", "Cu", "Zn", "I", "Sn", "Pb", "Te", "Ca")[i + 1]
 
-edge_labels_type(::PTC_FRDataset) = Tuple{String}
+edge_labels_type(::PTC_FRDataset) = @NamedTuple{bond_type::String}
 edge_labels_map(::PTC_FRDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
 
-graph_labels_type(::PTC_FRDataset) = Tuple{Int8}
+graph_labels_type(::PTC_FRDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    PTC_MM
@@ -584,13 +577,13 @@ dataset_references(::PTC_MMDataset) = [2, 23]
 
 readme_name(::PTC_MMDataset) = "README.txt"
 
-node_labels_type(::PTC_MMDataset) = Tuple{String}
+node_labels_type(::PTC_MMDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::PTC_MMDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "As", "K", "B", "Cu", "Zn", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
 
-edge_labels_type(::PTC_MMDataset) = Tuple{String}
+edge_labels_type(::PTC_MMDataset) = @NamedTuple{bond_type::String}
 edge_labels_map(::PTC_MMDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
 
-graph_labels_type(::PTC_MMDataset) = Tuple{Int8}
+graph_labels_type(::PTC_MMDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    PTC_MR
@@ -606,13 +599,13 @@ dataset_references(::PTC_MRDataset) = [2, 23]
 
 readme_name(::PTC_MRDataset) = "README.txt"
 
-node_labels_type(::PTC_MRDataset) = Tuple{String}
+node_labels_type(::PTC_MRDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::PTC_MRDataset, i) = ("In", "P", "O", "N", "Na", "C", "Cl", "S", "Br", "F", "K", "Cu", "Zn", "I", "Ba", "Sn", "Pb", "Ca")[i + 1]
 
-edge_labels_type(::PTC_MRDataset) = Tuple{String}
+edge_labels_type(::PTC_MRDataset) = @NamedTuple{bond_type::String}
 edge_labels_map(::PTC_MRDataset, i) = ("triple", "double", "single", "aromatic")[i + 1]
 
-graph_labels_type(::PTC_MRDataset) = Tuple{Int8}
+graph_labels_type(::PTC_MRDataset) = @NamedTuple{class::Int8}
 
 
 ## --------------------------------------
@@ -658,15 +651,15 @@ readme_name(::ZINC_fullDataset) = "README.txt"
 
 dataset_references(::ZINC_fullDataset) = [31]
 
-edge_labels_type(::ZINC_fullDataset) = @NamedTuple{bond_type::String}
-edge_labels_map(::ZINC_fullDataset, i) = ("single", "double", "triple")[i]
-
 node_labels_type(::ZINC_fullDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::ZINC_fullDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
                                           "O -", "N H1 +", "Br", "N H3 +", "N H2 +",
                                           "N +", "N -", "S -", "I", "P", "O H1 +",
                                           "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
                                           "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+edge_labels_type(::ZINC_fullDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_fullDataset, i) = ("single", "double", "triple")[i]
 
 graph_attributes_type(::ZINC_fullDataset) = Tuple{Float64}
 
@@ -684,15 +677,15 @@ readme_name(::ZINC_testDataset) = "README.txt"
 
 dataset_references(::ZINC_testDataset) = [31]
 
-edge_labels_type(::ZINC_testDataset) = @NamedTuple{bond_type::String}
-edge_labels_map(::ZINC_testDataset, i) = ("single", "double", "triple")[i]
-
 node_labels_type(::ZINC_testDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::ZINC_testDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
                                           "O -", "N H1 +", "Br", "N H3 +", "N H2 +",
                                           "N +", "N -", "S -", "I", "P", "O H1 +",
                                           "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
                                           "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+edge_labels_type(::ZINC_testDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_testDataset, i) = ("single", "double", "triple")[i]
 
 graph_attributes_type(::ZINC_testDataset) = Tuple{Float64}
 
@@ -704,14 +697,11 @@ struct ZINC_trainDataset <: TUDataset end
 
 dataset_name(::ZINC_trainDataset) = "ZINC_train"
 
-dataset_hash(::ZINC_testDataset) = "37aa44df9dd9417600c240226d1d847a7b9098c3036c9bf7e2000196cec92bef"
+dataset_hash(::ZINC_trainDataset) = "37aa44df9dd9417600c240226d1d847a7b9098c3036c9bf7e2000196cec92bef"
 
 readme_name(::ZINC_trainDataset) = "README.txt"
 
 dataset_references(::ZINC_trainDataset) = [31]
-
-edge_labels_type(::ZINC_trainDataset) = @NamedTuple{bond_type::String}
-edge_labels_map(::ZINC_trainDataset, i) = ("single", "double", "triple")[i]
 
 node_labels_type(::ZINC_trainDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::ZINC_trainDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
@@ -719,6 +709,9 @@ node_labels_map(::ZINC_trainDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl"
                                           "N +", "N -", "S -", "I", "P", "O H1 +",
                                           "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
                                           "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+edge_labels_type(::ZINC_trainDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_trainDataset, i) = ("single", "double", "triple")[i]
 
 graph_attributes_type(::ZINC_trainDataset) = Tuple{Float64}
 
@@ -736,15 +729,15 @@ readme_name(::ZINC_valDataset) = "README.txt"
 
 dataset_references(::ZINC_valDataset) = [31]
 
-edge_labels_type(::ZINC_valDataset) = @NamedTuple{bond_type::String}
-edge_labels_map(::ZINC_valDataset, i) = ("single", "double", "triple")[i]
-
 node_labels_type(::ZINC_valDataset) = @NamedTuple{atom_type::String}
 node_labels_map(::ZINC_valDataset, i) = ("C", "O", "N", "F", "C H1", "S", "Cl",
                                           "O -", "N H1 +", "Br", "N H3 +", "N H2 +",
                                           "N +", "N -", "S -", "I", "P", "O H1 +",
                                           "N H1 -", "O +", "S +", "P H1", "P H2", "C H2 -",
                                           "P +", "S H1 +", "C H1 -", "P H1 +")[i + 1]
+
+edge_labels_type(::ZINC_valDataset) = @NamedTuple{bond_type::String}
+edge_labels_map(::ZINC_valDataset, i) = ("single", "double", "triple")[i]
 
 graph_attributes_type(::ZINC_valDataset) = Tuple{Float64}
 
@@ -766,7 +759,8 @@ readme_name(::DDDataset) = "README.txt"
 graph_eltype(::DDDataset) = Int16
 
 node_labels_type(::DDDataset) = Tuple{Int8}
-graph_labels_type(::DDDataset) = Tuple{Int8}
+
+graph_labels_type(::DDDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    ENZYMES
@@ -782,10 +776,10 @@ readme_name(::ENZYMESDataset) = "README.txt"
 
 dataset_references(::ENZYMESDataset) = [4, 5]
 
-graph_labels_type(::ENZYMESDataset) = Tuple{Int8}
-
 node_labels_type(::ENZYMESDataset) = Tuple{Int8}
 node_attributes_type(::ENZYMESDataset) = NTuple{18, Float64}
+
+graph_labels_type(::ENZYMESDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    PROTEINS
@@ -803,10 +797,10 @@ dataset_references(::PROTEINSDataset) = [4, 6]
 
 graph_eltype(::PROTEINSDataset) = Int16
 
-graph_labels_type(::PROTEINSDataset) = Tuple{Int8}
-
 node_labels_type(::PROTEINSDataset) = Tuple{Int8}
 node_attributes_type(::PROTEINSDataset) = Tuple{Float64}
+
+graph_labels_type(::PROTEINSDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    PROTEINS_full
@@ -824,10 +818,10 @@ dataset_references(::PROTEINS_fullDataset) = [4, 6]
 
 graph_eltype(::PROTEINS_fullDataset) = Int16
 
-graph_labels_type(::PROTEINS_fullDataset) = Tuple{Int8}
-
 node_labels_type(::PROTEINS_fullDataset) = Tuple{Int8}
 node_attributes_type(::PROTEINS_fullDataset) = NTuple{29, Float64}
+
+graph_labels_type(::PROTEINS_fullDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    COIL-DEL
@@ -843,12 +837,12 @@ dataset_references(::COIL_DELDataset) = [16, 18]
 
 readme_name(::COIL_DELDataset) = "COIL-DEL_label_readme.txt"
 
-node_attributes_type(::COIL_DELDataset) = NamedTuple{(:x, :y), Tuple{Float32, Float32}}
+node_attributes_type(::COIL_DELDataset) = @NamedTuple{x::Float32, y::Float32}
 
-edge_labels_type(::COIL_DELDataset) = NamedTuple{(:valence,), Tuple{Int8}}
+edge_labels_type(::COIL_DELDataset) = @NamedTuple{valence::Int8}
 edge_labels_map(::COIL_DELDataset, i) = (2, 1)[i + 1] # 0 => 2, 1 => 1
 
-graph_labels_type(::COIL_DELDataset) = Tuple{Int8} # TODO not sure what the labels mean
+graph_labels_type(::COIL_DELDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    COIL-RAG
@@ -869,9 +863,9 @@ readme_name(::COIL_RAGDataset) = "COIL-RAG_label_readme.txt"
 
 node_attributes_type(::COIL_RAGDataset) = NTuple{64, Float64}
 
-edge_attributes_type(::COIL_RAGDataset) = NamedTuple{(:boundary,), Tuple{Float32}}
+edge_attributes_type(::COIL_RAGDataset) = NamedTuple{boundary::Float32}
 
-graph_labels_type(::COIL_RAGDataset) = Tuple{Int8} # TODO not sure what the labels mean
+graph_labels_type(::COIL_RAGDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    Fingerprint
@@ -896,7 +890,6 @@ graph_labels_map(::FingerprintDataset, i) =
     ("L", "TR", "A", "TA", "W", "R", "T", "WR", "TL", "LT", "AT", "RT", "WL", "RW", "AR")[i + 1]
 
 
-
 ## --------------------------------------
 ##    COLLAB
 ## --------------------------------------
@@ -911,7 +904,7 @@ dataset_references(::COLLABDataset) = [14]
 
 graph_eltype(::COLLABDataset) = Int16
 
-graph_labels_type(::COLLABDataset) = Tuple{Int8} # TODO not sure what the labels mean
+graph_labels_type(::COLLABDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    DBLP_v1
@@ -925,16 +918,16 @@ dataset_hash(::DBLP_v1Dataset) = "67d8a383e8920e9f9e6d8afd55df4104619252f2d08772
 
 dataset_references(::DBLP_v1Dataset) = [26]
 
-dataset_readme(::DBLP_v1Dataset) = "readme.txt"
-
-graph_labels_type(::DBLP_v1Dataset) = Tuple{Float32}
-graph_labels_map(::DBLP_v1Dataset, i) = (1.0f0, -1.0f0)[i + 1]
-
-edge_labels_type(::DBLP_v1Dataset) = Tuple{String}
-edge_labels_map(::DBLP_v1Dataset, i) = ("P2P", "P2W", "W2W")[i + 1]
+readme_name(::DBLP_v1Dataset) = "readme.txt"
 
 # TODO there is actually a node map with over 40000 entries defined in readme.txt
-node_labels_type(::DBLP_v1Dataset) = Tuple{UInt16}
+node_labels_type(::DBLP_v1Dataset) = @NamedTuple{paperid_or_keyword::UInt16}
+
+edge_labels_type(::DBLP_v1Dataset) = @NamedTuple{citation_relashionship::String}
+edge_labels_map(::DBLP_v1Dataset, i) = ("P2P", "P2W", "W2W")[i + 1]
+
+graph_labels_type(::DBLP_v1Dataset) = @NamedTuple{class::Int8}
+graph_labels_map(::DBLP_v1Dataset, i) = (1, -1)[i + 1]
 
 ## --------------------------------------
 ##    IMDB-BINARY
@@ -980,7 +973,7 @@ dataset_references(::REDDIT_BINARYDataset) = [14]
 
 graph_eltype(::REDDIT_BINARYDataset) = Int16
 
-graph_labels_type(::REDDIT_BINARYDataset) = Tuple{Int8}
+graph_labels_type(::REDDIT_BINARYDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    REDDIT-MULTI-5K
@@ -996,7 +989,7 @@ dataset_references(::REDDIT_MULTI_5KDataset) = [14]
 
 graph_eltype(::REDDIT_MULTI_5KDataset) = Int16
 
-graph_labels_type(::REDDIT_MULTI_5KDataset) = Tuple{Int8}
+graph_labels_type(::REDDIT_MULTI_5KDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    REDDIT-MULTI-12K
@@ -1012,7 +1005,7 @@ dataset_references(::REDDIT_MULTI_12KDataset) = [14]
 
 graph_eltype(::REDDIT_MULTI_12KDataset) = Int16
 
-graph_labels_type(::REDDIT_MULTI_12KDataset) = Tuple{Int8}
+graph_labels_type(::REDDIT_MULTI_12KDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    COLORS-3
@@ -1026,11 +1019,17 @@ dataset_hash(::COLORS_3Dataset) = "380d8f9e03c73455a2b280f859b136c53c80544eabd83
 
 dataset_references(::COLORS_3Dataset) = [27]
 
+readme_name(::COLORS_3Dataset) = "README.txt"
+
 graph_eltype(::COLORS_3Dataset) = Int16
 
-graph_attributes_type(::COLORS_3Dataset) = Tuple{Int8} # TODO not sure what the labels mean
+# TODO not sure what the attributes mean
+# attribute 2 to 4 seem to be one-hot vectors for red, green, blue
+node_attributes_type(::COLORS_3Dataset) = NTuple{5, Bool}
 
-node_attributes_type(::COLORS_3Dataset) = NTuple{5, Bool} # TODO not sure what the attributes mean
+# TODO not sure what the labels mean
+# maybe number of green vertices
+graph_attributes_type(::COLORS_3Dataset) = Tuple{Int8}
 
 ## --------------------------------------
 ##    SYNTHETIC
@@ -1046,11 +1045,10 @@ dataset_references(::SYNTHETICDataset) = [3]
 
 dataset_hash(::SYNTHETICDataset) = "3c0344e0cd6518d8b3f52bf45d152b1a9a007a523f5e91fc2bda929cc353c84d"
 
-graph_labels_type(::SYNTHETICDataset) = Tuple{Bool}
-graph_labels_map(::SYNTHETICDataset, i) = Bool(i)
-
 node_labels_type(::SYNTHETICDataset) = Tuple{Int8}
 node_attributes_type(::SYNTHETICDataset) = Tuple{Float64}
+
+graph_labels_type(::SYNTHETICDataset) = @NamedTuple{class::Bool}
 
 ## --------------------------------------
 ##    SYNTHETICnew
@@ -1064,9 +1062,9 @@ dataset_hash(::SYNTHETICnewDataset) = "07e27d6ff1c25d036df5bf3593b1bf4676f51e656
 
 dataset_references(::SYNTHETICnewDataset) = [3, 10]
 
-graph_labels_type(::SYNTHETICnewDataset) = Tuple{Int8}
-
 node_attributes_type(::SYNTHETICnewDataset) = Tuple{Float64}
+
+graph_labels_type(::SYNTHETICnewDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    Synthie
@@ -1082,9 +1080,9 @@ dataset_references(::SynthieDataset) = [21]
 
 dataset_hash(::SynthieDataset) = "c5bada5ffe42b4a901d50e75f10c3f969fb962f94acaab0265f46097496154d5"
 
-graph_labels_type(::SynthieDataset) = Tuple{Int8}
-
 node_attributes_type(::SynthieDataset) = NTuple{15, Float64}
+
+graph_labels_type(::SynthieDataset) = @NamedTuple{class::Int8}
 
 ## --------------------------------------
 ##    TRIANGLES
@@ -1100,10 +1098,11 @@ readme_name(::TRIANGLESDataset) = "README.txt"
 
 dataset_hash(::TRIANGLESDataset) = "d14094eecf75fd60cf08b9d18d33a7e8c7657ff07e554956f0230fba9bf63b60"
 
-graph_labels_type(::TRIANGLESDataset) = Tuple{Int8}
-graph_attributes_type(::TRIANGLESDataset) = Tuple{Int8}
+node_attributes_type(::TRIANGLESDataset) = @NamedTuple{num_triangles_containing_vertex::Int8}
 
-node_attributes_type(::TRIANGLESDataset) = Tuple{Int8}
+# This graph provides labels and attributes but they are the same
+# so we only load the attributes file
+graph_attributes_type(::TRIANGLESDataset) = @NamedTuple{num_triangles::Int8}
 
 # ======================================
 #   loadgraphs
