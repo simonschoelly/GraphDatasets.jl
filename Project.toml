@@ -1,7 +1,7 @@
 name = "GraphDatasets"
 uuid = "bf13de61-383b-4610-8d2c-e75fac0df62b"
 authors = ["Simon Schoelly <sischoel@gmail.com> and contributors"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
