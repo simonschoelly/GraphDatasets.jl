@@ -1024,7 +1024,7 @@ readme_name(::COLORS_3Dataset) = "README.txt"
 graph_eltype(::COLORS_3Dataset) = Int16
 
 # TODO not sure what the attributes mean
-# first four attributes seem to be one-hot vectors for red, green, blue
+# attribute 2 to 4 seem to be one-hot vectors for red, green, blue
 node_attributes_type(::COLORS_3Dataset) = NTuple{5, Bool}
 
 # TODO not sure what the labels mean
