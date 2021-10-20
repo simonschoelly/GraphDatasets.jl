@@ -2,7 +2,7 @@ module GraphDatasets
 
 import Base: getindex, length, eltype, iterate, show, firstindex, lastindex
 
-import LightGraphs: loadgraphs, SimpleGraph
+import Graphs: loadgraphs, SimpleGraph
 
 import SimpleValueGraphs:
     nv, has_edge, is_directed,
@@ -32,7 +32,7 @@ export
     lastindex,
 
 
-    # reexport from LightGraphs & SimpleValueGraphs
+    # reexport from Graphs.jl & SimpleValueGraphs
     nv,
     has_edge,
 
