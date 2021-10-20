@@ -43,9 +43,9 @@ julia> g = qm9[1234]
     edge value types: (Bool, Bool, Bool, Bool)
    graph value types: (μ = Float64, α = Float64, ϵ_HOMO = Float64, ϵ_LUMO = Float64, Δϵ = Float64, electronig_spatial_energy = Float64, ZPVE = Float64, U_0 = Float64, U = Float64, H = Float64, G = Float64, c_v = Float64, UATOM_0 = Float64, UTAM = Float64, HATOM = Float64, GATOM = Float64, A = Float64, B = Float64, C = Float64)
 
-# ValGraphCollectionView inherits from LightGraphs.AbstractGraph and SimpleValueGraphs.AbstractValGraph
+# ValGraphCollectionView inherits from Graphs.AbstractGraph and SimpleValueGraphs.AbstractValGraph
 # and can therefore be used like other graph types
-julia> using LightGraphs: diameter
+julia> using Graphs: diameter
 
 julia> diameter(g)
 7
@@ -67,7 +67,7 @@ julia> ValGraph(g)
 
 - [GraphMLDatasets.jl](https://github.com/yuehhua/GraphMLDatasets.jl)
 - [SNAPDatasets.jl](https://github.com/JuliaGraphs/SNAPDatasets.jl)
-- [LightGraphsExtras.j](https://github.com/JuliaGraphs/LightGraphsExtras.jl)
+- [GraphsExtras.j](https://github.com/JuliaGraphs/GraphsExtras.jl)
 - [MatrixMarket.jl](https://github.com/JuliaSparse/MatrixMarket.jl)
 - [MatrixDepot.jl](https://github.com/JuliaMatrices/MatrixDepot.jl)
 
