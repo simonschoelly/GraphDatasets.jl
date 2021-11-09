@@ -6,7 +6,7 @@
 [![Coverage](https://codecov.io/gh/simonschoelly/GraphDatasets.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/simonschoelly/GraphDatasets.jl)
 
 *GraphDatasets.jl* is a package for downloading and working with graph datasets. It currently provides the
-ability to download some of the datasets from [graphlearning.io](https://www.graphlearning.io).
+ability to download some of the datasets from [graphlearning.io](https://chrsmrrs.github.io/datasets/).
 
 ## Quick example
 
